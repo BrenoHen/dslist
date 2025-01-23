@@ -3,6 +3,7 @@ package ia.breno.dslist.services;
 import ia.breno.dslist.dto.GameDTO;
 import ia.breno.dslist.dto.GameMinDTO;
 import ia.breno.dslist.entities.Game;
+import ia.breno.dslist.projections.GameMinProjection;
 import ia.breno.dslist.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,12 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<GameMinDTO> findAll(){
         List<Game> result = gameRepository.findAll();
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId){
+        List<GameMinProjection> result = gameRepository.searchByList(listId);
         return result.stream().map(x -> new GameMinDTO(x)).toList();
     }
 }
